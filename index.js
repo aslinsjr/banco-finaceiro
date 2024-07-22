@@ -1,39 +1,71 @@
 var prompt = require('prompt-sync')();
+const axios = require('axios');
+const chalk = require('chalk');
 
-const usuarios = [{ nome: "Alexandre", sobrenome: "Lins", idade: 34, cpf: "08341569469", saldo: 0 },
-{ nome: "Outro", sobrenome: "User", idade: 16, cpf: "12345678999", saldo: 0 }];   // Lista de usuários
+let listaDeUsuarios = [];  // Lista de usuários
 
-let usuario = {}
+let listaDeContas = [];  // Lista de usuários
+
+let usuario = {}   //Objeto de usuário
 
 let opcao = 0   //Opção selecionada no menu
 
 let sair = false //Opção de saida do sistema
 
-// Funções 
+// Importações de Funções
 
-function fourSpacing() {   // Espaçamento de 4 linhas
-    console.log()
-    console.log()
-    console.log()
-    console.log()
+const { twoSpacing, fourSpacing } = require('./funcoes/space-lines.js')
+const { editUser } = require('./funcoes/interacao-api.js')
+const { creatingUser } = require('./funcoes/criando-user.js')
+const { paying, getLoan, transfering, depositing, widrawing, showingBalance, getContacts } = require('./funcoes/operacoes.js')
+const { saudacao, divisoria, getLogo } = require('./funcoes/decorativos.js')
+
+async function getData() {   //Função de Resgate de Dados em API
+    try {
+        const resposta = await axios.get("http://localhost:3000/users")
+
+        listaDeUsuarios = await resposta.data
+
+        return listaDeUsuarios
+    }
+    catch (error) {
+        console.log(error)
+    }
 }
 
-function twoSpacing() {   // Espaçamento de 2 linhas
-    console.log()
-    console.log()
+async function getBills() {   //Função de Resgate de Dados em API
+    try {
+        const resposta = await axios.get("http://localhost:3000/bills")
+
+        listaDeContas = await resposta.data
+
+        return listaDeContas
+    }
+    catch (error) {
+        console.log(error)
+    }
 }
 
-function getLogin() {    // Função de Login
+function getLogin(listaDeUsuarios) {    // Função de Login
 
-    console.log()
+    getLogo()
+    fourSpacing()
     console.log("          Digite seu CPF para acessar...")
     console.log()
     let cpf = prompt("          ")
 
-    return usuario = usuarios.find((user) => user.cpf === cpf);
+    return usuario = listaDeUsuarios.find((user) => user.cpf === cpf);
 }
 
 function mainMenu() {   // Função do Menu Inicial
+
+    console.clear()
+    getLogo()
+
+    fourSpacing()
+    console.log("          Bem Vindo " + chalk.black.bgRgb(220,120,42)(` ${usuario.nome} ${usuario.sobrenome} `))
+    twoSpacing()
+
     twoSpacing()
     console.log("          Escolha a opção da operação:")
     twoSpacing()
@@ -42,194 +74,52 @@ function mainMenu() {   // Função do Menu Inicial
     console.log("          3 - Saldo")
     console.log("          4 - Transferências")
     console.log("          5 - Empréstimo")
-    console.log("          6 - Atendimento")
-    console.log("          7 - Sair")
+    console.log("          6 - Pagamento")
+    console.log("          7 - Atendimento")
+    console.log("          8 - Sair")
     twoSpacing()
 
     return opcao = prompt("          ")
 }
 
-function depositing(usuario) {   // Função de Deposito
-    fourSpacing()
-    console.log("          Depósito")
-    twoSpacing()
-    console.log("          Indique o valor a ser depositado em Reais")
-    console.log("          ex. 1000.00")
-    twoSpacing()
-    const deposito = prompt("          ")
-    twoSpacing()
-    console.log("          Você confirma o valor R$ " + deposito)
-    console.log()
-    console.log("          Digite “sim” ou “não” para continuar")
-    console.log()
-    const confirmacao = prompt("          ")
-
-    if (confirmacao === "sim") {
-        return usuario.saldo = (+usuario.saldo) + (+deposito)
-    }
-}
-
-function widrawing(usuario) {   // Função de Saque
-    fourSpacing()
-    console.log("          Saque")
-    twoSpacing()
-    console.log("          Indique o valor a ser sacado em Reais")
-    console.log("          ex. 500.00")
-    twoSpacing()
-    const saque = prompt("          ")
-    twoSpacing()
-    console.log("          Você confirma o valor R$ " + saque)
-    console.log()
-    console.log("          Digite “sim” ou “não” para continuar")
-    console.log()
-    const confirmacao = prompt("          ")
-
-    if (confirmacao === "sim" && saque < usuario.saldo) {
-        return usuario.saldo = (+usuario.saldo) - (+saque)
-    }
-
-    if (saque > usuario.saldo) {
-        return (
-            console.log(),
-            console.log(),
-            console.log(),
-            console.log(),
-            console.log("          Saldo insuficiente..."),
-            console.log(),
-            console.log()
-        )
-    }
-}
-
-function showingBalance(usuario) {   // Função de Consulta do Saldo
-    fourSpacing()
-    console.log("          Saldo")
-    twoSpacing()
-    console.log("          " + usuario.nome + ", o valor total em sua conta é R$ " + usuario.saldo)
-    twoSpacing()
-}
-
-function transfering(usuario) {   // Função de Transferência
-    fourSpacing()
-    console.log("          Transferência")
-    twoSpacing()
-    console.log("          Indique o valor a ser transferido em Reais")
-    console.log("          ex. 100.00")
-    twoSpacing()
-    const transferencia = prompt("          ")
-    twoSpacing()
-    console.log("          Informe o cpf do títular da conta a ser transferido o valor")
-    fourSpacing()
-    const cpfRecebedor = prompt("          ")
-
-    const usuarioRecebedor = usuarios.find((user) => user.cpf === cpfRecebedor);
-
-    if (usuarioRecebedor) {
-        twoSpacing()
-        console.log("          Você confirma a tranferência de R$ " + transferencia + " para " + usuarioRecebedor.nome + " " + usuarioRecebedor.sobrenome)
-        console.log()
-        console.log("          Digite “sim” ou “não” para continuar")
-        console.log()
-        const confirmacao = prompt("          ")
-
-        if (confirmacao === "sim" && transferencia < usuario.saldo) {
-            return usuario.saldo = (+usuario.saldo) - (+transferencia)
-        }
-
-        if (transferencia > usuario.saldo) {
-            return (
-                console.log(),
-                console.log(),
-                console.log(),
-                console.log(),
-                console.log("          Saldo insuficiente..."),
-                console.log(),
-                console.log()
-            )
-        }
-    } else {
-        fourSpacing()
-        console.log("          Usuário não encontrado... ")
-        twoSpacing()
-    }
-}
-
-function getLoan(usuario) {   // Função de Empréstimo
-    fourSpacing()
-    console.log("          Deseja contratar um empréstimo?")
-    twoSpacing()
-    console.log("          Digite “sim” ou “não” para continuar")
-    console.log()
-    const confirmacao = prompt("          ")
-
-    if (confirmacao === "sim" && usuario.idade >= 18) {
-        twoSpacing()
-        console.log("          Insira o valor que você gostaria de receber")
-        console.log()
-        const emprestimo = prompt("          ")
-        twoSpacing()
-        console.log("          Você confirma a solicitação de emprestimo de R$ " + emprestimo)
-        console.log()
-        console.log("          Digite “sim” ou “não” para continuar")
-        console.log()
-        const confirmacao = prompt("          ")
-
-        if (confirmacao === "sim") {
-            return usuario.saldo = (+usuario.saldo) + (+emprestimo)
-        }
-
-    } else {
-        fourSpacing()
-        console.log("          Você precisa ter maior idade para pedir emprestimos :(")
-        twoSpacing()
-    }
-
-}
-
-function getContacts() {
-    twoSpacing()
-    console.log("          Nossos Contatos")
-    twoSpacing()
-    console.log("          Site: www.bancog.com ")
-    console.log()
-    console.log("          Whatsapp: 11 99999-9999")
-    console.log()
-    console.log("          Telefone: 0800 800 0008")
-    console.log()
-}
-
 function menuRouter(opcao) {   // Função de Roteamento do Menu
     if (opcao === "1") {
-        return depositing(usuario)
+        return console.clear(),depositing(usuario)
     }
 
     if (opcao === "2") {
-        return widrawing(usuario)
+        return console.clear(),widrawing(usuario)
     }
 
     if (opcao === "3") {
-        return showingBalance(usuario)
+        return console.clear(),showingBalance(usuario)
     }
 
     if (opcao === "4") {
-        return transfering(usuario)
+        return console.clear(),transfering(usuario, listaDeUsuarios)
     }
 
     if (opcao === "5") {
-        return getLoan(usuario)
+        return console.clear(),getLoan(usuario)
     }
 
     if (opcao === "6") {
-        return getContacts()
+        return console.clear(),paying(usuario, listaDeContas)
+    }
+
+    if (opcao === "7") {
+        return console.clear(),getContacts()
     }
 }
 
 function returning(opcao) {   // Função de Retorno ao Menu
 
-    if (opcao === "7") {
-        return sair = true
+    if (opcao === "8") {
+        return sair = true,
+        console.clear()
+
     } else {
-        fourSpacing()
+        twoSpacing()
         console.log("          O que você deseja fazer agora?")
         console.log()
         console.log("          1 - Retornar ao Menu Principal")
@@ -238,40 +128,94 @@ function returning(opcao) {   // Função de Retorno ao Menu
         const retorno = prompt("          ")
 
         if (retorno === "2") {
-            return sair = true
+            return sair = true,
+            console.clear()
         }
     }
 }
 
 function app() {   // Aplicação
 
-    fourSpacing()
-    console.log('          - BANCO GENÉRICO - ')
-    fourSpacing()
+    console.clear()
 
-    getLogin()
+    divisoria()
 
-    while (!usuario) {
-        fourSpacing()
-        console.log("          Usuário não encontrado... ")
+    console.log(chalk.whiteBright("            Bem vindo ao"))
+
+    saudacao()
+
+    divisoria()
+
+    console.log(chalk.whiteBright("          Já é nosso cliente?"))
+    console.log()
+    console.log(chalk.whiteBright("          Digite “sim” ou “não” para continuar"))
+    console.log()
+    const confirmacao = prompt("          ")
+
+    if (confirmacao !== "sim") {
+        creatingUser()
+    }
+
+    setTimeout(() => {
         twoSpacing()
+        console.log("          aguarde.")
+    }, 500)
 
-        getLogin()
-    }
+    setTimeout(() => {
+        console.log("          aguarde..")
+    }, 1000)
 
-    fourSpacing()
-    console.log("          Bem Vindo ", usuario.nome + " " + usuario.sobrenome)
-    twoSpacing()
+    setTimeout(() => {
+        console.log("          aguarde...")
+    }, 1500)
 
-    while (!sair) {
-        mainMenu()
+    setTimeout(() => {
+        twoSpacing()
+        console.clear()
+    }, 2000)
+    
+    getData()
 
-        menuRouter(opcao)
+    getBills()
 
-        returning(opcao)
-    }
+    setTimeout(() => {   // Delay para carregar dados da API
+
+        if (listaDeUsuarios) {
+            getLogin(listaDeUsuarios)
+        }
+
+        while (!usuario) {
+
+            console.clear()
+            getLogo()
+
+            fourSpacing()
+            console.log("          Usuário não encontrado... ")
+            twoSpacing()
+
+            getLogin(listaDeUsuarios)
+
+        }
+
+        while (!sair) {
+
+            mainMenu()
+
+            menuRouter(opcao)
+
+            returning(opcao)
+        }
+
+        return usuario
+
+    }, 2500)
+
+    setTimeout(() => {
+
+        editUser(usuario)
+
+    }, 3000)
 
 }
 
 app()
-

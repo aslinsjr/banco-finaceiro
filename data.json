@@ -1,0 +1,47 @@
+{
+  "users": [
+    {
+      "id": "9089",
+      "nome": "Alexandre",
+      "sobrenome": "Lins",
+      "idade": "34",
+      "cpf": "08341569469",
+      "saldo": 20000,
+      "transacoes": [
+        {
+          "transacao": "Depósito",
+          "hora": "10:00",
+          "data": "22/07/2024",
+          "valor": 20000
+        },
+        {
+          "transacao": "Saque",
+          "hora": "10:00",
+          "data": "22/07/2024",
+          "valor": 2000
+        },
+        {
+          "transacao": "Empréstimo",
+          "hora": "10:01",
+          "data": "22/07/2024",
+          "valor": 4000
+        },
+        {
+          "transacao": "Saque",
+          "hora": "10:30",
+          "data": "22/07/2024",
+          "valor": 2000
+        }
+      ]
+    }
+  ],
+  "bills": [
+    {
+      "codigo": "1234567891234",
+      "cobrador": "Neoenergia",
+      "valor": 200,
+      "pago": false,
+      "id": "4a2a"
+    }
+  ]
+}
