@@ -170,7 +170,6 @@ function app() {   // Aplicação
     }, 1500)
 
     setTimeout(() => {
-        twoSpacing()
         console.clear()
     }, 2000)
     

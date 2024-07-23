@@ -18,12 +18,16 @@ function getRegister(usuario, transacao, valor) {   // Função de Registro de T
         data: `${day < 10 ? "0" + day : day}/${month < 10 ? "0" + month : month}/${year}`,
         valor: valor
     }
-
+    
+    if(transacao !== "Transferência") {
     divisoriaNBG()
     twoSpacing()
     console.log("          Você realizou um(a) " + transacao + " no valor de " + "R$ " + valor)
     twoSpacing()
     divisoriaNBG()
+    } else {
+        console.log("")
+    }
 
     return usuario.transacoes.push(novoRegistro)
 }
@@ -127,7 +131,7 @@ function transfering(usuario, listaDeUsuarios) {   // Função de Transferência
         getLogo()
 
         fourSpacing()
-        console.log("          Você confirma a tranferência de R$ " + transferencia + " para " + usuarioRecebedor.nome + " " + usuarioRecebedor.sobrenome)
+        console.log("          Você confirma a transferência de R$ " + transferencia + " para " + usuarioRecebedor.nome + " " + usuarioRecebedor.sobrenome)
         console.log()
         console.log("          Digite “sim” ou “não” para continuar")
         console.log()
@@ -137,13 +141,13 @@ function transfering(usuario, listaDeUsuarios) {   // Função de Transferência
         if (confirmacao === "sim" && transferencia < usuario.saldo) {
 
             usuarioRecebedor.saldo = (+usuarioRecebedor.saldo) + (+transferencia)
-            getRegister(usuarioRecebedor, "Tranferência", +transferencia)
+            getRegister(usuarioRecebedor, "Transferência", +transferencia)
 
             setTimeout(() => {
                 editUser(usuarioRecebedor)
             }, 3000)
 
-            return usuario.saldo = (+usuario.saldo) - (+transferencia), getRegister(usuario, "Tranferência", +transferencia)
+            return usuario.saldo = (+usuario.saldo) - (+transferencia), getRegister(usuario, "Transferência", +transferencia)
         }
 
         if (transferencia > usuario.saldo) {
