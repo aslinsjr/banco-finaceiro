@@ -33,7 +33,7 @@ function creatingUser() {   // Função de Criação
     textInput("Informe seu CPF")
     let cpf = prompt("          ")
 
-    while (!cpf) {
+    while (!cpf || cpf.replace(/[A-z]/g, "").length !== 11 ) {
 
         console.clear()
         getLogo()
@@ -85,9 +85,9 @@ function creatingUser() {   // Função de Criação
 
     fourSpacing()
     textInput("Informe sua idade")
-    let idade = prompt("          ")
+    let idade = parseInt(prompt("          "))
 
-    while (!idade) {
+    while (!idade  || typeof idade !== "number") {
         
         console.clear()
         getLogo()
@@ -95,13 +95,16 @@ function creatingUser() {   // Função de Criação
         fourSpacing()
         console.log("          dado necessário para continuar...")
         textInput("Informe sua idade")
-        idade = prompt("          ")
+        idade = parseInt(prompt("          "))
     }
 
     console.clear()
     getLogo()
     fourSpacing()
     console.log("          Usuário criado com sucesso!")
+
+    nome = nome.toLowerCase().replace(/(?:^|\s)(?!da|de|do)\S/g, l => l.toUpperCase());
+    sobrenome = sobrenome.toLowerCase().replace(/(?:^|\s)(?!da|de|do)\S/g, l => l.toUpperCase());
 
     return usuario = {
         nome,

@@ -1,13 +1,26 @@
 {
   "users": [
     {
-      "id": "9089",
+      "id": "4cd7",
       "nome": "Alexandre",
       "sobrenome": "Lins",
-      "idade": "34",
+      "idade": 34,
       "cpf": "08341569469",
-      "saldo": 10000,
-      "transacoes": []
+      "saldo": 4900,
+      "transacoes": [
+        {
+          "transacao": "Depósito",
+          "hora": "22:51",
+          "data": "24/07/2024",
+          "valor": 5000
+        },
+        {
+          "transacao": "Saque",
+          "hora": "22:51",
+          "data": "24/07/2024",
+          "valor": 100
+        }
+      ]
     }
   ],
   "bills": [
