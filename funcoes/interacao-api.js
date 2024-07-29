@@ -7,6 +7,8 @@ async function postingUser(usuario) {   //Função de Criação de Usuários
             sobrenome: usuario.sobrenome,
             idade: usuario.idade,
             cpf: usuario.cpf,
+            email: usuario.email,
+            senha: usuario.senha,
             saldo: 0,
             transacoes: []
         })
