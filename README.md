@@ -11,12 +11,19 @@ Esse é o repositório da atividade referente a criação das funcionalidades de
 - Jessica
 - Luis
 - Murilo
-- Thaiza
+- Taisa
 - Yuri
 
 ### Screenshot
 
 ![](./img/Captura%20de%20tela%202024-07-23%20153931.png)
+
+### Links
+
+- Fluxograma URL: [Fluxograma](https://www.figma.com/board/lSMLOYoqn8FmXyUni8VR24/Fluxograma-Banco-Gen%C3%A9rico?node-id=0-1&t=RqlsYUS9Vg1HDEU6-0)
+- Live Site URL: [Page](https://aslinsjr.github.io/banco2.0/)
+
+
 
 
 

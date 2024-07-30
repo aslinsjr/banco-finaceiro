@@ -6,4 +6,5 @@ const axios = require('axios')
 const { getLogo, getTitle } = require('./funcoes/decorativos.js')
 const { fourSpacing, twoSpacing } = require('./funcoes/space-lines.js')
 
-let teste = prompt("", {echo: / A-z /g})
+console.log("O input abaixo está escondido")
+let teste = prompt.hide ("")
